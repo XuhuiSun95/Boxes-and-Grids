@@ -319,8 +319,8 @@ class BoxesandGridsGame():
         '''
 
         ## change the next line of minimax/ aplpha-beta pruning according to your input and output requirments
-        next_move=self.minimax(self.boardh,self.boardv,1);
-        #next_move_alpha=self.alphabetapruning();
+        #next_move=self.minimax(self.boardh,self.boardv,1);
+        next_move=self.alphabetapruning(self.boardh,self.boardv,3,float('-inf'),float('inf'));
 
         self.make_move(next_move,1);
         print 'move_made by player 1',next_move
@@ -328,7 +328,6 @@ class BoxesandGridsGame():
     '''
     Write down the code for minimax to a certain depth do no implement minimax all the way to the final state.
     '''
-
 
     def minimax(self,h_matrix,v_matrix,depth):
         # Helper function: min_play
@@ -340,7 +339,7 @@ class BoxesandGridsGame():
             best_score=float('inf');
 
             for move in next_move:
-                state_h,state_v,score=self.next_state(move,h_matrix,v_matrix);
+                state_h,state_v,_=self.next_state(move,h_matrix,v_matrix);
                 score = max_play(state_h,state_v,depth-1);
 
                 if(score<best_score):
@@ -358,7 +357,7 @@ class BoxesandGridsGame():
             best_score=float('-inf');
 
             for move in next_move:
-                state_h,state_v,score=self.next_state(move,h_matrix,v_matrix);
+                state_h,state_v,_=self.next_state(move,h_matrix,v_matrix);
                 score = min_play(state_h,state_v,depth-1);
 
                 if(score>best_score):
@@ -374,7 +373,7 @@ class BoxesandGridsGame():
         best_score=float('-inf');
 
         for move in next_move:
-            state_h,state_v,score=self.next_state(move,h_matrix,v_matrix);
+            state_h,state_v,_=self.next_state(move,h_matrix,v_matrix);
             score = min_play(state_h,state_v,depth);
 
             if(score>best_score):
@@ -388,14 +387,77 @@ class BoxesandGridsGame():
     Change the alpha beta pruning function to return the optimal move .
     '''
 
-    def alphabetapruning(self):
-        return [0,0,0];
+    def alphabetapruning(self,h_matrix,v_matrix,depth,alpha=float('-inf'),beta=float('inf')):
+        # Helper function: min_play
+        def min_play(h_matrix,v_matrix,depth,alpha,beta):
+            if depth==0 or bg.game_ends(h_matrix,v_matrix):
+                return self.evaluate(h_matrix,v_matrix);
+
+            next_move=self.list_possible_moves(h_matrix,v_matrix);
+            best_score=float('inf');
+
+            for move in next_move:
+                state_h,state_v,_=self.next_state(move,h_matrix,v_matrix);
+                score = max_play(state_h,state_v,depth-1,alpha,beta);
+
+                if(score<best_score):
+                    best_score=score;
+                    best_move=move;
+
+                if(best_score<=alpha):
+                    return best_score;
+
+                beta=min(beta,best_score);
+
+            return best_score;
+
+        # Helper function: max_play
+        def max_play(h_matrix,v_matrix,depth,alpha,beta):
+            if depth==0 or bg.game_ends(h_matrix,v_matrix):
+                return self.evaluate(h_matrix,v_matrix);
+
+            next_move=self.list_possible_moves(h_matrix,v_matrix);
+            best_score=float('-inf');
+
+            for move in next_move:
+                state_h,state_v,_=self.next_state(move,h_matrix,v_matrix);
+                score = min_play(state_h,state_v,depth-1,alpha,beta);
+
+                if(score>best_score):
+                    best_score=score;
+                    best_move=move;
+
+                if(best_score>=beta):
+                    return best_score;
+
+                alpha=max(alpha,best_score);
+
+            return best_score;
+
+        # Body function of Alphabetapruning
+        next_move=self.list_possible_moves(h_matrix,v_matrix);
+
+        best_move=next_move[0];
+        best_score=float('-inf');
+
+        for move in next_move:
+            state_h,state_v,_=self.next_state(move,h_matrix,v_matrix);
+            score = min_play(state_h,state_v,depth,alpha,beta);
+
+            if(score>best_score):
+                best_score=score;
+                best_move=move;
+
+            if(best_score>=beta):
+                return best_score;
+
+            alpha=max(alpha,best_score);
+
+        return best_move;
 
     '''
     Write down you own evaluation strategy in the evaluation function
     '''
-
-
 
     def evaluate(self,h_matrix,v_matrix):
          return 0
