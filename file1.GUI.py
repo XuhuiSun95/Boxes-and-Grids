@@ -319,8 +319,8 @@ class BoxesandGridsGame():
         '''
 
         ## change the next line of minimax/ aplpha-beta pruning according to your input and output requirments
-        #next_move=self.minimax(self.boardh,self.boardv,2);
-        next_move=self.alphabetapruning(self.boardh,self.boardv,4,float('-inf'),float('inf'));
+        next_move=self.minimax(self.boardh,self.boardv,2);
+        #next_move=self.alphabetapruning(self.boardh,self.boardv,4,float('-inf'),float('inf'));
 
         self.make_move(next_move,1);
         print 'move_made by player 1',next_move
@@ -442,11 +442,14 @@ class BoxesandGridsGame():
     '''
 
     def evaluate(self,h_matrix,v_matrix):
-        #import random
-        #score = random.uniform(1,10)
-
-        #return score/1000
-        return 0
+        score = 0
+        '''
+        for x in range(1,5):
+            if(all(item==True for item in h_matrix[x]) and h_matrix[x+1][0]==True):
+                print "now========================================="
+                score += 2000
+        '''
+        return score/1000
 
 bg=BoxesandGridsGame();
 while (bg.game_ends(bg.boardh,bg.boardv)==False):
