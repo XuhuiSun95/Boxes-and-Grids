@@ -320,7 +320,7 @@ class BoxesandGridsGame():
 
         ## change the next line of minimax/ aplpha-beta pruning according to your input and output requirments
         #next_move=self.minimax(self.boardh,self.boardv,2);
-        next_move=self.alphabetapruning(self.boardh,self.boardv,3,float('-inf'),float('inf'));
+        next_move=self.alphabetapruning(self.boardh,self.boardv,4,float('-inf'),float('inf'));
 
         self.make_move(next_move,1);
         print 'move_made by player 1',next_move
@@ -340,7 +340,7 @@ class BoxesandGridsGame():
 
             for move in next_move:
                 state_h,state_v,point=self.next_state(move,h_matrix,v_matrix)
-                v = max_value(state_h,state_v,depth-1) - point
+                v = max_value(state_h,state_v,depth-1) - 2*point
                 if(v<min_value):
                     min_value=v
                     best_move=move
@@ -392,7 +392,7 @@ class BoxesandGridsGame():
 
             for move in next_move:
                 state_h,state_v,point=self.next_state(move,h_matrix,v_matrix)
-                v = max_value(state_h,state_v,depth-1,alpha,beta) - point
+                v = max_value(state_h,state_v,depth-1,alpha,beta) - 2*point
                 if(v<min_value):
                     min_value=v
                     best_move=move
@@ -416,8 +416,8 @@ class BoxesandGridsGame():
                     max_value=v
                     best_move=move
                 if(max_value>=beta):
-                    return max_value;
-                alpha = max(alpha,max_value);
+                    return max_value
+                alpha = max(alpha,max_value)
             return max_value
 
         # Body function of Alphabetapruning
@@ -432,6 +432,9 @@ class BoxesandGridsGame():
             if(score>best_score):
                 best_score=score
                 best_move=move
+            if(best_score>=beta):
+                return best_move
+            alpha = max(alpha,best_score)
         return best_move
 
     '''
@@ -439,8 +442,11 @@ class BoxesandGridsGame():
     '''
 
     def evaluate(self,h_matrix,v_matrix):
-         return 0
+        #import random
+        #score = random.uniform(1,10)
 
+        #return score/1000
+        return 0
 
 bg=BoxesandGridsGame();
 while (bg.game_ends(bg.boardh,bg.boardv)==False):
