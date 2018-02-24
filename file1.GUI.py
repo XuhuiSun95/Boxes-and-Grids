@@ -319,8 +319,8 @@ class BoxesandGridsGame():
         '''
 
         ## change the next line of minimax/ aplpha-beta pruning according to your input and output requirments
-        next_move=self.minimax(self.boardh,self.boardv,2);
-        #next_move=self.alphabetapruning(self.boardh,self.boardv,4,float('-inf'),float('inf'));
+        #next_move=self.minimax(self.boardh,self.boardv,2);
+        next_move=self.alphabetapruning(self.boardh,self.boardv,4,float('-inf'),float('inf'));
 
         self.make_move(next_move,1);
         print 'move_made by player 1',next_move
@@ -433,8 +433,12 @@ class BoxesandGridsGame():
                 best_score=score
                 best_move=move
             if(best_score>=beta):
+                print "alpha = ", alpha
+                print "beta = ", beta
                 return best_move
             alpha = max(alpha,best_score)
+        print "alpha = ", alpha
+        print "beta = ", beta
         return best_move
 
     '''
